@@ -3,7 +3,7 @@ import 'package:test_daftar_belanja/services/shopping_services.dart';
 import 'list_belanja_screen.dart';
 
 class ShoppingListScreen extends StatefulWidget {
-  const ShoppingListScreen({super.key});
+  const ShoppingListScreen({Key? key}) : super(key: key);
 
   @override
   State<ShoppingListScreen> createState() => _ShoppingListScreenState();
@@ -43,30 +43,32 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                 Expanded(
                   child: TextField(
                     controller: _controller2,
+                    keyboardType: TextInputType.number,
                     decoration: const InputDecoration(hintText: 'Masukkan NPM'),
                   ),
                 ),
               ],
             ),
           ),
-          SizedBox(height: 370),
-          Container(
-            width: 400,
-            height: 45,
-            child: TextButton(
-                style: TextButton.styleFrom(backgroundColor: Colors.purple),
-                onPressed: () {
-                  _shoppingService.addShoppingItem(
-                      _controller1.text, _controller2.text);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ListBelanjaScreen()));
-                },
-                child: Text(
-                  "Input",
-                  style: TextStyle(color: Colors.white),
-                )),
+          SizedBox(height: 1),
+          Padding(
+            padding:
+                EdgeInsets.only(bottom: 16.0), // Memberikan ruang di bawah FAB
+            child: FloatingActionButton(
+              onPressed: () {
+                _shoppingService.addShoppingItem(
+                    _controller1.text, _controller2.text, context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ListBelanjaScreen()),
+                );
+              },
+              child: Icon(Icons.add),
+              backgroundColor: Colors.purple, // Ubah warna latar belakang FAB
+              elevation: 4, // Berikan efek bayangan pada FAB
+              splashColor:
+                  Colors.white, // Ubah warna efek splash saat FAB ditekan
+            ),
           ),
         ],
       ),

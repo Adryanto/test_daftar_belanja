@@ -1,4 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
 
 class ShoppingService {
   final DatabaseReference _database =
@@ -8,13 +9,9 @@ class ShoppingService {
     return _database.onValue.map((event) {
       final Map<String, String> items = {};
       DataSnapshot snapshot = event.snapshot;
-      // print('Snapshot data: ${snapshot.value}');
       if (snapshot.value != null) {
         Map<dynamic, dynamic> values = snapshot.value as Map<dynamic, dynamic>;
         values.forEach((key, value) {
-          // print('Key: $key'); // Print the key
-          // print('Value: $value'); // Print the value
-          // items[key] = value['name']['npm'] as String;
           items[key] =
               'Nama\t\t:${value['name']} \nnpm\t\t\t\t: ${value['npm']}';
         });
@@ -23,8 +20,13 @@ class ShoppingService {
     });
   }
 
-  void addShoppingItem(String nama, npm) {
-    _database.push().set({'name': nama, 'npm': npm});
+  void addShoppingItem(String nama, npm, BuildContext context) {
+    if (nama.isEmpty || npm.isEmpty) {
+      const warning = SnackBar(content: Text("Data yang diinput harus diisi"));
+      ScaffoldMessenger.of(context).showSnackBar(warning);
+    } else {
+      _database.push().set({'name': nama, 'npm': npm});
+    }
   }
 
   Future<void> removeShoppingItem(String key) async {
